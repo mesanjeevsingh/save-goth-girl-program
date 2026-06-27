@@ -163,6 +163,90 @@ body {
     color: var(--text-light);
 }
 
+/* Founder Section */
+.founder {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: var(--dark-bg);
+}
+
+.founder h2 {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    color: var(--accent-pink);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.founder-container {
+    display: flex;
+    justify-content: center;
+}
+
+.founder-card {
+    background-color: var(--darker-bg);
+    border: 3px solid var(--accent-pink);
+    padding: 2.5rem;
+    border-radius: 10px;
+    max-width: 700px;
+    box-shadow: 0 0 25px rgba(217, 70, 166, 0.2);
+}
+
+.founder-card h3 {
+    color: var(--accent-pink);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.founder-bio {
+    color: var(--text-light);
+    line-height: 1.8;
+}
+
+.founder-bio p {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.founder-bio strong {
+    color: var(--accent-purple);
+}
+
+.founder-bio em {
+    color: var(--accent-pink);
+    font-style: italic;
+}
+
+.achievements {
+    list-style: none;
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    background-color: var(--dark-bg);
+    padding: 1.5rem;
+    border-left: 4px solid var(--accent-purple);
+    border-radius: 5px;
+}
+
+.achievements li {
+    margin-bottom: 0.8rem;
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+.achievements li:before {
+    content: "";
+    margin-right: 0;
+}
+
+.founder-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 35px rgba(217, 70, 166, 0.4);
+    border-color: var(--accent-purple);
+}
+
 /* Ideas Section */
 .ideas {
     padding: 4rem 2rem;
@@ -211,51 +295,260 @@ body {
     font-weight: bold;
 }
 
-/* Resources Section */
-.resources {
+/* Best Goth Girl Section */
+.best-goth-girl {
+    padding: 4rem 2rem;
+    background-color: var(--darker-bg);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.best-goth-girl h2 {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    color: var(--accent-pink);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.best-goth-girl-container {
+    display: flex;
+    justify-content: center;
+}
+
+.bgf-card {
+    background-color: var(--dark-bg);
+    border: 3px solid var(--accent-pink);
+    border-radius: 10px;
+    overflow: hidden;
+    max-width: 600px;
+    box-shadow: 0 0 30px rgba(217, 70, 166, 0.3);
+    transition: all 0.3s ease;
+}
+
+.bgf-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 0 50px rgba(217, 70, 166, 0.5);
+    border-color: var(--accent-purple);
+}
+
+.bgf-image {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1a1a1a, #2a1a3a);
+}
+
+.bgf-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.bgf-info {
+    padding: 2.5rem;
+}
+
+.bgf-info h3 {
+    font-size: 2rem;
+    color: var(--accent-pink);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.bgf-age {
+    text-align: center;
+    color: var(--accent-purple);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+}
+
+.bgf-record {
+    background-color: var(--darker-bg);
+    border-left: 4px solid var(--accent-pink);
+    padding: 1.5rem;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+}
+
+.bgf-record h4 {
+    color: var(--accent-pink);
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.bgf-record p {
+    color: var(--text-light);
+    margin-bottom: 0.8rem;
+}
+
+.bgf-record strong {
+    color: var(--accent-purple);
+}
+
+.bgf-description {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-light);
+}
+
+.bgf-quote {
+    font-style: italic;
+    color: var(--accent-pink);
+    text-align: center;
+    padding: 1rem;
+    border-top: 2px solid var(--accent-purple);
+    border-bottom: 2px solid var(--accent-purple);
+    font-size: 1.1rem;
+}
+
+/* Donation Section */
+.donation {
     padding: 4rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.resources-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-}
-
-.resource-category {
-    background-color: var(--darker-bg);
-    border: 2px solid var(--accent-purple);
-    padding: 2rem;
-    border-radius: 8px;
-}
-
-.resource-category h3 {
+.donation h2 {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    text-align: center;
     color: var(--accent-pink);
-    margin-bottom: 1.5rem;
-    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
-.resource-category ul {
+.donation-container {
+    display: flex;
+    justify-content: center;
+}
+
+.donation-content {
+    background-color: var(--darker-bg);
+    border: 3px solid var(--accent-pink);
+    padding: 2.5rem;
+    border-radius: 10px;
+    max-width: 700px;
+    box-shadow: 0 0 25px rgba(217, 70, 166, 0.2);
+}
+
+.donation-content h3 {
+    color: var(--accent-pink);
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.donation-reasons {
+    margin-bottom: 2rem;
+    background-color: var(--dark-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-purple);
+}
+
+.donation-reasons p {
+    color: var(--accent-purple);
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.funny-reasons {
     list-style: none;
 }
 
-.resource-category li {
-    padding: 0.5rem 0;
+.funny-reasons li {
     color: var(--text-light);
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 0.8rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    font-size: 0.95rem;
 }
 
-.resource-category li:last-child {
-    border-bottom: none;
+.funny-reasons em {
+    color: var(--accent-pink);
+    font-style: italic;
 }
 
-.resource-category li:before {
-    content: "▹ ";
+.donation-qr {
+    text-align: center;
+    margin: 2rem 0;
+    padding: 2rem;
+    background-color: var(--dark-bg);
+    border-radius: 8px;
+    border: 2px solid var(--accent-purple);
+}
+
+.donation-qr h4 {
     color: var(--accent-purple);
-    margin-right: 0.5rem;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.qr-code {
+    width: 250px;
+    height: 250px;
+    border: 3px solid var(--accent-pink);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.qr-text {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
+
+.donation-methods {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: var(--dark-bg);
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-pink);
+}
+
+.donation-methods p {
+    color: var(--accent-purple);
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.donation-methods ul {
+    list-style: none;
+}
+
+.donation-methods li {
+    color: var(--text-light);
+    margin-bottom: 0.8rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.donation-methods li:before {
+    content: "💜";
+    position: absolute;
+    left: 0;
+}
+
+.donation-footer {
+    text-align: center;
+    color: var(--accent-pink);
+    font-style: italic;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--accent-purple);
+    font-size: 0.95rem;
+}
+
+.donation-content:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 35px rgba(217, 70, 166, 0.4);
+    border-color: var(--accent-purple);
 }
 
 /* Community Section */
