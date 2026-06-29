@@ -3,6 +3,14 @@
 
 // ===== GOTH GIRL TAP GAME =====
 function createGothTapGame() {
+    // Mobile check
+    const isMobile = window.innerWidth < 768;
+    const emojiSize = isMobile ? '2.5rem' : '3rem';
+    const scorePosition = isMobile ? 'right' : 'left';
+    const scoreTop = isMobile ? '20px' : '20px';
+    const scoreLeft = isMobile ? 'auto' : '20px';
+    const scoreRight = isMobile ? '20px' : 'auto';
+    
     // Game variables
     let score = 0;
     let combo = 0;
@@ -36,47 +44,50 @@ function createGothTapGame() {
     `;
     document.body.appendChild(gameContainer);
     
-    // Score display
+    // Score display - positioned better for mobile
     const scoreDisplay = document.createElement('div');
     scoreDisplay.id = 'goth-score-display';
     scoreDisplay.style.cssText = `
         position: fixed;
-        top: 20px;
-        left: 20px;
+        top: ${scoreTop};
+        left: ${scoreLeft};
+        right: ${scoreRight};
         background: linear-gradient(135deg, #d946a6, #8b5fbf);
         color: white;
-        padding: 15px 25px;
+        padding: ${isMobile ? '10px 15px' : '15px 25px'};
         border-radius: 10px;
-        font-size: 1.3rem;
+        font-size: ${isMobile ? '1rem' : '1.3rem'};
         font-weight: bold;
         z-index: 501;
         box-shadow: 0 0 20px rgba(217, 70, 166, 0.6);
         font-family: Georgia, serif;
         pointer-events: auto;
-        min-width: 150px;
+        min-width: ${isMobile ? '120px' : '150px'};
         text-align: center;
     `;
     scoreDisplay.innerHTML = `
-        <div style="font-size: 0.9rem; opacity: 0.9;">Score</div>
-        <div style="font-size: 1.8rem;">${score}</div>
-        <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 5px;">Best: ${highScore}</div>
+        <div style="font-size: ${isMobile ? '0.8rem' : '0.9rem'}; opacity: 0.9;">Score</div>
+        <div style="font-size: ${isMobile ? '1.4rem' : '1.8rem'};">${score}</div>
+        <div style="font-size: ${isMobile ? '0.7rem' : '0.8rem'}; opacity: 0.8; margin-top: 3px;">Best: ${highScore}</div>
     `;
     document.body.appendChild(scoreDisplay);
     
-    // Combo counter
+    // Combo counter - positioned below score on mobile
     const comboDisplay = document.createElement('div');
     comboDisplay.id = 'goth-combo-display';
     comboDisplay.style.cssText = `
         position: fixed;
-        top: 150px;
-        left: 20px;
+        top: ${isMobile ? '110px' : '150px'};
+        left: ${scoreLeft};
+        right: ${scoreRight};
         color: #d946a6;
-        font-size: 1.2rem;
+        font-size: ${isMobile ? '0.9rem' : '1.2rem'};
         font-weight: bold;
         z-index: 501;
         font-family: Georgia, serif;
         text-shadow: 0 0 10px rgba(217, 70, 166, 0.5);
         display: none;
+        text-align: ${isMobile ? 'center' : 'left'};
     `;
     comboDisplay.textContent = `🔥 Combo: ${combo}x`;
     document.body.appendChild(comboDisplay);
@@ -134,7 +145,7 @@ function createGothTapGame() {
             position: fixed;
             left: ${x}px;
             top: ${y}px;
-            font-size: 3rem;
+            font-size: ${emojiSize};
             cursor: pointer;
             z-index: 510;
             user-select: none;
@@ -164,9 +175,9 @@ function createGothTapGame() {
             
             // Update score display
             scoreDisplay.innerHTML = `
-                <div style="font-size: 0.9rem; opacity: 0.9;">Score</div>
-                <div style="font-size: 1.8rem;">${Math.floor(score)}</div>
-                <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 5px;">Best: ${highScore}</div>
+                <div style="font-size: ${isMobile ? '0.8rem' : '0.9rem'}; opacity: 0.9;">Score</div>
+                <div style="font-size: ${isMobile ? '1.4rem' : '1.8rem'};">${Math.floor(score)}</div>
+                <div style="font-size: ${isMobile ? '0.7rem' : '0.8rem'}; opacity: 0.8; margin-top: 3px;">Best: ${highScore}</div>
             `;
             
             // Update combo display
@@ -223,8 +234,8 @@ function createGothTapGame() {
         }, 4000);
     }
     
-    // Spawn new elements every 1.5 seconds
-    setInterval(createTapElement, 1500);
+    // SLOWER spawn rate: 3.5 seconds instead of 1.5
+    setInterval(createTapElement, 3500);
     
     // Initial spawn
     createTapElement();
