@@ -1,16 +1,22 @@
 // 🖤 Save Goth Girl Program - Interactive JavaScript 🖤
 // Cute & Gothic features to make the website come alive!
 
-// ===== 0. CUTE BLACK CAT ANIMATION =====
+// ===== 0. CUTE BLACK CAT ANIMATION (Mobile Friendly) =====
 function createBlackCat() {
     const cat = document.createElement('div');
     cat.textContent = '🐈‍⬛';
     cat.id = 'goth-cat';
+    
+    // Mobile check
+    const isMobile = window.innerWidth < 768;
+    const catSize = isMobile ? '2.5rem' : '3rem';
+    const startBottom = isMobile ? '80px' : '100px';
+    
     cat.style.cssText = `
         position: fixed;
         left: -50px;
-        bottom: 100px;
-        font-size: 3rem;
+        bottom: ${startBottom};
+        font-size: ${catSize};
         cursor: pointer;
         z-index: 999;
         user-select: none;
@@ -38,7 +44,6 @@ function createBlackCat() {
             }
             
             cat.style.left = catX + 'px';
-            cat.style.bottom = catY + 'px';
             
             // Flip cat based on direction
             if (direction === -1) {
@@ -53,17 +58,22 @@ function createBlackCat() {
     
     walkCat();
     
-    // Click anywhere to make cat jump there
-    document.addEventListener('click', (e) => {
+    // Handle both click and touch
+    function makeCatJump(e) {
+        // Get coordinates from either mouse or touch event
+        let clickX, clickY;
+        
+        if (e.touches) {
+            // Touch event
+            clickX = e.touches[0].clientX;
+            clickY = e.touches[0].clientY;
+        } else {
+            // Mouse event
+            clickX = e.clientX;
+            clickY = e.clientY;
+        }
+        
         isWalking = false;
-        
-        const clickX = e.clientX;
-        const clickY = e.clientY;
-        
-        // Calculate distance and direction
-        const distX = clickX - catX;
-        const distY = clickY - catY;
-        const distance = Math.sqrt(distX * distX + distY * distY);
         
         // Flip cat if jumping left
         if (clickX < catX) {
@@ -76,7 +86,7 @@ function createBlackCat() {
         cat.style.transition = `all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)`;
         cat.style.left = clickX + 'px';
         cat.style.bottom = clickY + 'px';
-        cat.style.fontSize = '4rem';
+        cat.style.fontSize = isMobile ? '3.5rem' : '4rem';
         
         catX = clickX;
         catY = clickY;
@@ -91,19 +101,23 @@ function createBlackCat() {
         setTimeout(() => {
             isWalking = true;
             cat.style.animation = 'none';
-            cat.style.fontSize = '3rem';
+            cat.style.fontSize = catSize;
             cat.style.transition = 'all 0.3s ease';
         }, 2000);
-    });
+    }
     
-    // Cat hover effect
+    // Both click and touch events
+    document.addEventListener('click', makeCatJump);
+    document.addEventListener('touchend', makeCatJump);
+    
+    // Cat hover/touch effect
     cat.addEventListener('mouseover', () => {
-        cat.style.fontSize = '4rem';
+        cat.style.fontSize = isMobile ? '3.5rem' : '4rem';
         cat.textContent = '🐈‍⬛✨';
     });
     
     cat.addEventListener('mouseout', () => {
-        cat.style.fontSize = '3rem';
+        cat.style.fontSize = catSize;
         cat.textContent = '🐈‍⬛';
     });
 }
