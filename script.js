@@ -174,7 +174,280 @@ catAnimationStyle.textContent = `
 `;
 document.head.appendChild(catAnimationStyle);
 
-// ===== 1. FLOATING GOTHIC ELEMENTS (Bats & Hearts) =====
+// ===== GOTH GIRL TAP GAME =====
+function createGothTapGame() {
+    // Game variables
+    let score = 0;
+    let combo = 0;
+    let highScore = localStorage.getItem('gothGameHighScore') || 0;
+    
+    // Goth emojis with different point values
+    const gothElements = [
+        { emoji: '🐈‍⬛', points: 10, rarity: 'common', label: 'Cat' },
+        { emoji: '🦇', points: 5, rarity: 'common', label: 'Bat' },
+        { emoji: '🖤', points: 5, rarity: 'common', label: 'Heart' },
+        { emoji: '💜', points: 5, rarity: 'common', label: 'Purple Heart' },
+        { emoji: '🌙', points: 15, rarity: 'rare', label: 'Moon' },
+        { emoji: '💀', points: 20, rarity: 'epic', label: 'Skull' },
+        { emoji: '🕷️', points: 8, rarity: 'uncommon', label: 'Spider' },
+        { emoji: '⚰️', points: 25, rarity: 'legendary', label: 'Coffin' },
+        { emoji: '🔮', points: 30, rarity: 'legendary', label: 'Crystal Ball' },
+        { emoji: '🌑', points: 12, rarity: 'uncommon', label: 'Dark Moon' },
+    ];
+    
+    // Create game UI
+    const gameContainer = document.createElement('div');
+    gameContainer.id = 'goth-game-container';
+    gameContainer.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 500;
+    `;
+    document.body.appendChild(gameContainer);
+    
+    // Score display
+    const scoreDisplay = document.createElement('div');
+    scoreDisplay.id = 'goth-score-display';
+    scoreDisplay.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        background: linear-gradient(135deg, #d946a6, #8b5fbf);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 10px;
+        font-size: 1.3rem;
+        font-weight: bold;
+        z-index: 501;
+        box-shadow: 0 0 20px rgba(217, 70, 166, 0.6);
+        font-family: Georgia, serif;
+        pointer-events: auto;
+        min-width: 150px;
+        text-align: center;
+    `;
+    scoreDisplay.innerHTML = `
+        <div style="font-size: 0.9rem; opacity: 0.9;">Score</div>
+        <div style="font-size: 1.8rem;">${score}</div>
+        <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 5px;">Best: ${highScore}</div>
+    `;
+    document.body.appendChild(scoreDisplay);
+    
+    // Combo counter
+    const comboDisplay = document.createElement('div');
+    comboDisplay.id = 'goth-combo-display';
+    comboDisplay.style.cssText = `
+        position: fixed;
+        top: 150px;
+        left: 20px;
+        color: #d946a6;
+        font-size: 1.2rem;
+        font-weight: bold;
+        z-index: 501;
+        font-family: Georgia, serif;
+        text-shadow: 0 0 10px rgba(217, 70, 166, 0.5);
+        display: none;
+    `;
+    comboDisplay.textContent = `🔥 Combo: ${combo}x`;
+    document.body.appendChild(comboDisplay);
+    
+    // Milestone messages
+    const milestones = {
+        50: '🖤 Goth Girl Saved! 🖤',
+        100: '💜 You Are A Legend! 💜',
+        250: '🌙 Master of Darkness! 🌙',
+        500: '⚰️ Goth Culture Guardian! ⚰️',
+        1000: '🔮 You Have Ascended! 🔮',
+    };
+    
+    function showMilestoneMessage(milestone) {
+        const message = document.createElement('div');
+        message.textContent = milestones[milestone];
+        message.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #d946a6, #8b5fbf);
+            color: white;
+            padding: 2rem 3rem;
+            border-radius: 15px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            z-index: 9999;
+            box-shadow: 0 0 40px rgba(217, 70, 166, 0.8);
+            animation: milestone-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+        `;
+        
+        document.body.appendChild(message);
+        setTimeout(() => {
+            message.style.animation = 'milestone-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) reverse';
+            setTimeout(() => message.remove(), 400);
+        }, 2000);
+    }
+    
+    // Create tapable goth element
+    function createTapElement() {
+        const element = gothElements[Math.floor(Math.random() * gothElements.length)];
+        const tapDiv = document.createElement('div');
+        
+        const x = Math.random() * (window.innerWidth - 80);
+        const y = Math.random() * (window.innerHeight - 80);
+        
+        tapDiv.textContent = element.emoji;
+        tapDiv.style.cssText = `
+            position: fixed;
+            left: ${x}px;
+            top: ${y}px;
+            font-size: 3rem;
+            cursor: pointer;
+            z-index: 510;
+            user-select: none;
+            animation: tap-appear 0.4s ease-out;
+            filter: drop-shadow(0 0 5px rgba(217, 70, 166, 0.5));
+            pointer-events: auto;
+        `;
+        
+        // Add rarity glow
+        if (element.rarity === 'rare') {
+            tapDiv.style.filter = 'drop-shadow(0 0 10px #8b5fbf)';
+        } else if (element.rarity === 'epic') {
+            tapDiv.style.filter = 'drop-shadow(0 0 15px #d946a6)';
+        } else if (element.rarity === 'legendary') {
+            tapDiv.style.filter = 'drop-shadow(0 0 20px #FFD700)';
+        }
+        
+        gameContainer.appendChild(tapDiv);
+        
+        // Click to tap
+        tapDiv.addEventListener('click', (e) => {
+            e.stopPropagation();
+            
+            // Add points
+            score += element.points * (1 + combo * 0.1); // Combo bonus
+            combo++;
+            
+            // Update score display
+            scoreDisplay.innerHTML = `
+                <div style="font-size: 0.9rem; opacity: 0.9;">Score</div>
+                <div style="font-size: 1.8rem;">${Math.floor(score)}</div>
+                <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 5px;">Best: ${highScore}</div>
+            `;
+            
+            // Update combo display
+            comboDisplay.style.display = 'block';
+            comboDisplay.textContent = `🔥 Combo: ${combo}x`;
+            
+            // Update high score
+            if (score > highScore) {
+                highScore = Math.floor(score);
+                localStorage.setItem('gothGameHighScore', highScore);
+            }
+            
+            // Show point popup
+            const pointsPopup = document.createElement('div');
+            const pointValue = Math.floor(element.points * (1 + combo * 0.1));
+            pointsPopup.textContent = `+${pointValue} 🖤`;
+            pointsPopup.style.cssText = `
+                position: fixed;
+                left: ${x}px;
+                top: ${y}px;
+                color: #d946a6;
+                font-size: 1.5rem;
+                font-weight: bold;
+                pointer-events: none;
+                z-index: 511;
+                animation: points-float 1.5s ease-out forwards;
+            `;
+            
+            document.body.appendChild(pointsPopup);
+            setTimeout(() => pointsPopup.remove(), 1500);
+            
+            // Remove tapped element
+            tapDiv.style.animation = 'tap-disappear 0.3s ease-out forwards';
+            setTimeout(() => tapDiv.remove(), 300);
+            
+            // Check milestones
+            Object.keys(milestones).forEach(milestone => {
+                if (Math.floor(score) === parseInt(milestone)) {
+                    showMilestoneMessage(milestone);
+                }
+            });
+        });
+        
+        // Remove after 4 seconds if not tapped
+        setTimeout(() => {
+            if (tapDiv.parentNode) {
+                tapDiv.style.animation = 'tap-disappear 0.3s ease-out forwards';
+                setTimeout(() => tapDiv.remove(), 300);
+            }
+            combo = Math.max(0, combo - 1); // Decrease combo if missed
+            if (combo === 0) {
+                comboDisplay.style.display = 'none';
+            }
+        }, 4000);
+    }
+    
+    // Spawn new elements every 1.5 seconds
+    setInterval(createTapElement, 1500);
+    
+    // Initial spawn
+    createTapElement();
+}
+
+// Add animations for tap game
+const tapGameStyles = document.createElement('style');
+tapGameStyles.textContent = `
+    @keyframes tap-appear {
+        from {
+            transform: scale(0) rotate(-30deg);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1) rotate(0deg);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes tap-disappear {
+        to {
+            transform: scale(0) rotate(30deg);
+            opacity: 0;
+        }
+    }
+    
+    @keyframes points-float {
+        from {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateY(-60px);
+            opacity: 0;
+        }
+    }
+    
+    @keyframes milestone-pop {
+        from {
+            transform: translate(-50%, -50%) scale(0.5);
+            opacity: 0;
+        }
+        to {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+    }
+    
+    #goth-score-display:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 30px rgba(217, 70, 166, 0.9);
+    }
+`;
+document.head.appendChild(tapGameStyles);
 function createFloatingElements() {
     const elements = ['🦇', '🖤', '🌙', '💜'];
     const container = document.body;
@@ -361,181 +634,4 @@ function addHeadingGlows() {
 
 // ===== 5. CUTE HEART TRAIL (Follow cursor) =====
 function createHeartTrail() {
-    document.addEventListener('mousemove', (e) => {
-        // Only create hearts occasionally to avoid lag
-        if (Math.random() > 0.8) {
-            const heart = document.createElement('div');
-            heart.textContent = '💜';
-            heart.style.cssText = `
-                position: fixed;
-                left: ${e.clientX}px;
-                top: ${e.clientY}px;
-                pointer-events: none;
-                font-size: 1.5rem;
-                opacity: 0.7;
-                z-index: 5;
-            `;
-            
-            document.body.appendChild(heart);
-            
-            // Animate heart falling
-            let opacity = 0.7;
-            let top = e.clientY;
-            const interval = setInterval(() => {
-                opacity -= 0.05;
-                top += 2;
-                heart.style.opacity = opacity;
-                heart.style.top = top + 'px';
-                
-                if (opacity <= 0) {
-                    clearInterval(interval);
-                    heart.remove();
-                }
-            }, 30);
-        }
-    });
-}
-
-// ===== 6. EASTER EGG: GOTH GIRL COUNTER =====
-let gothGirlsSaved = 0;
-
-function addGothGirlCounter() {
-    // Add hidden button in header
-    const logo = document.querySelector('.nav-logo');
-    if (logo) {
-        logo.style.cursor = 'pointer';
-        logo.style.transition = 'all 0.3s ease';
-        
-        logo.addEventListener('click', () => {
-            gothGirlsSaved++;
-            
-            // Show celebration popup
-            const celebrate = document.createElement('div');
-            celebrate.textContent = `🖤 ${gothGirlsSaved} Goth Girls Saved! 🖤`;
-            celebrate.style.cssText = `
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: #d946a6;
-                color: white;
-                padding: 2rem;
-                border-radius: 10px;
-                font-size: 1.5rem;
-                font-weight: bold;
-                z-index: 9998;
-                box-shadow: 0 0 30px rgba(217, 70, 166, 0.8);
-            `;
-            
-            document.body.appendChild(celebrate);
-            
-            setTimeout(() => {
-                celebrate.style.animation = 'float 2s ease-out forwards';
-                setTimeout(() => celebrate.remove(), 2000);
-            }, 1000);
-        });
-    }
-}
-
-// ===== 7. SMOOTH SCROLL EFFECT =====
-function smoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
-}
-
-// ===== 8. PAGE LOAD ANIMATION =====
-function addPageLoadAnimation() {
-    document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.8s ease-in';
-    
-    setTimeout(() => {
-        document.body.style.opacity = '1';
-    }, 100);
-}
-
-// ===== 9. CUTE ALERT FOR DONATIONS =====
-function addDonationAlert() {
-    const donateBtn = document.querySelector('.submit-button');
-    if (donateBtn) {
-        donateBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            const alert = document.createElement('div');
-            alert.textContent = '💜 Thank you for supporting goth culture! You are a hero. 🖤';
-            alert.style.cssText = `
-                position: fixed;
-                top: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: linear-gradient(135deg, #d946a6, #8b5fbf);
-                color: white;
-                padding: 1.5rem 2rem;
-                border-radius: 10px;
-                font-weight: bold;
-                z-index: 9998;
-                box-shadow: 0 0 20px rgba(217, 70, 166, 0.6);
-                animation: slideDown 0.5s ease-out;
-            `;
-            
-            const slideStyle = document.createElement('style');
-            slideStyle.textContent = `
-                @keyframes slideDown {
-                    from {
-                        transform: translateX(-50%) translateY(-100px);
-                        opacity: 0;
-                    }
-                    to {
-                        transform: translateX(-50%) translateY(0);
-                        opacity: 1;
-                    }
-                }
-            `;
-            document.head.appendChild(slideStyle);
-            
-            document.body.appendChild(alert);
-            
-            setTimeout(() => alert.remove(), 3000);
-        });
-    }
-}
-
-// ===== 10. KEYBOARD SHORTCUT: PRESS 'G' for Goth Wisdom =====
-document.addEventListener('keydown', (e) => {
-    if (e.key.toLowerCase() === 'g') {
-        generateGothQuote();
-    }
-});
-
-// ===== INITIALIZE EVERYTHING =====
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('🖤 Save Goth Girl Program - JavaScript Activated! 🖤');
-    
-    createBlackCat();               // Cute black cat that walks and jumps!
-    createFloatingElements();      // Floating bats, hearts, moons
-    addQuoteButton();              // Cute quote generator button
-    addCardHoverEffects();         // Smooth card hover effects
-    addHeadingGlows();             // Glowing headings
-    createHeartTrail();            // Heart trail following cursor
-    addGothGirlCounter();          // Easter egg counter
-    smoothScroll();                // Smooth scrolling
-    addPageLoadAnimation();        // Page fade-in animation
-    addDonationAlert();            // Donation confirmation
-});
-
-// ===== WELCOME MESSAGE =====
-console.log(`
-🖤🖤🖤 Welcome to Save Goth Girl Program 🖤🖤🖤
-💜 Preserving goth culture, one website at a time 💜
-🌙 Tip: Press 'G' for goth wisdom! 🌙
-🖤 Click the SGGP logo to count saved goth girls! 🖤
-`);
+    document.addEventListener('mousemove', (
