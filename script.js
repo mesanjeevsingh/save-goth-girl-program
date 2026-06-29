@@ -1,179 +1,6 @@
 // 🖤 Save Goth Girl Program - Interactive JavaScript 🖤
 // Cute & Gothic features to make the website come alive!
 
-// ===== 0. CUTE BLACK CAT ANIMATION (Mobile Friendly) =====
-function createBlackCat() {
-    const cat = document.createElement('div');
-    cat.textContent = '🐈‍⬛';
-    cat.id = 'goth-cat';
-    
-    // Mobile check
-    const isMobile = window.innerWidth < 768;
-    const catSize = isMobile ? '2.5rem' : '3rem';
-    const startBottom = isMobile ? '80px' : '100px';
-    
-    cat.style.cssText = `
-        position: fixed;
-        left: -50px;
-        bottom: ${startBottom};
-        font-size: ${catSize};
-        cursor: pointer;
-        z-index: 999;
-        user-select: none;
-        pointer-events: auto;
-        transition: all 0.3s ease;
-    `;
-    
-    document.body.appendChild(cat);
-    
-    let catX = -50;
-    let catY = window.innerHeight - 150;
-    let direction = 1; // 1 for right, -1 for left
-    let isWalking = true;
-    
-    // Cat walking animation
-    function walkCat() {
-        if (isWalking) {
-            catX += direction * 2;
-            
-            // Change direction when reaching edges
-            if (catX > window.innerWidth) {
-                direction = -1;
-            } else if (catX < -50) {
-                direction = 1;
-            }
-            
-            cat.style.left = catX + 'px';
-            
-            // Flip cat based on direction
-            if (direction === -1) {
-                cat.style.transform = 'scaleX(-1)';
-            } else {
-                cat.style.transform = 'scaleX(1)';
-            }
-        }
-        
-        requestAnimationFrame(walkCat);
-    }
-    
-    walkCat();
-    
-    // Handle both click and touch
-    function makeCatJump(e) {
-        // Get coordinates from either mouse or touch event
-        let clickX, clickY;
-        
-        if (e.touches) {
-            // Touch event
-            clickX = e.touches[0].clientX;
-            clickY = e.touches[0].clientY;
-        } else {
-            // Mouse event
-            clickX = e.clientX;
-            clickY = e.clientY;
-        }
-        
-        isWalking = false;
-        
-        // Flip cat if jumping left
-        if (clickX < catX) {
-            cat.style.transform = 'scaleX(-1)';
-        } else {
-            cat.style.transform = 'scaleX(1)';
-        }
-        
-        // Jump animation
-        cat.style.transition = `all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)`;
-        cat.style.left = clickX + 'px';
-        cat.style.bottom = clickY + 'px';
-        cat.style.fontSize = isMobile ? '3.5rem' : '4rem';
-        
-        catX = clickX;
-        catY = clickY;
-        
-        // Add cute jump effect
-        cat.style.animation = 'cat-jump 0.5s ease-out';
-        
-        // Meow sound effect (visual)
-        showCatMeow(clickX, clickY);
-        
-        // Resume walking after 2 seconds
-        setTimeout(() => {
-            isWalking = true;
-            cat.style.animation = 'none';
-            cat.style.fontSize = catSize;
-            cat.style.transition = 'all 0.3s ease';
-        }, 2000);
-    }
-    
-    // Both click and touch events
-    document.addEventListener('click', makeCatJump);
-    document.addEventListener('touchend', makeCatJump);
-    
-    // Cat hover/touch effect
-    cat.addEventListener('mouseover', () => {
-        cat.style.fontSize = isMobile ? '3.5rem' : '4rem';
-        cat.textContent = '🐈‍⬛✨';
-    });
-    
-    cat.addEventListener('mouseout', () => {
-        cat.style.fontSize = catSize;
-        cat.textContent = '🐈‍⬛';
-    });
-}
-
-// Show cute "meow" text when cat jumps
-function showCatMeow(x, y) {
-    const meows = ['meow 🖤', 'mew!', 'purr 💜', 'meoowww', '🐾'];
-    const meow = document.createElement('div');
-    meow.textContent = meows[Math.floor(Math.random() * meows.length)];
-    meow.style.cssText = `
-        position: fixed;
-        left: ${x}px;
-        top: ${y}px;
-        font-size: 1.2rem;
-        color: #d946a6;
-        pointer-events: none;
-        font-weight: bold;
-        z-index: 998;
-        animation: meow-float 2s ease-out forwards;
-    `;
-    
-    document.body.appendChild(meow);
-    setTimeout(() => meow.remove(), 2000);
-}
-
-// Add cat animations to style
-const catAnimationStyle = document.createElement('style');
-catAnimationStyle.textContent = `
-    @keyframes cat-jump {
-        0% {
-            transform: translateY(0) scaleX(1);
-            filter: drop-shadow(0 0 0px rgba(217, 70, 166, 0));
-        }
-        50% {
-            transform: translateY(-30px) scaleX(1);
-            filter: drop-shadow(0 0 15px rgba(217, 70, 166, 0.6));
-        }
-        100% {
-            transform: translateY(0) scaleX(1);
-            filter: drop-shadow(0 0 0px rgba(217, 70, 166, 0));
-        }
-    }
-    
-    @keyframes meow-float {
-        0% {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        100% {
-            transform: translateY(-40px);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(catAnimationStyle);
-
 // ===== GOTH GIRL TAP GAME =====
 function createGothTapGame() {
     // Game variables
@@ -275,17 +102,21 @@ function createGothTapGame() {
             color: white;
             padding: 2rem 3rem;
             border-radius: 15px;
-            font-size: 1.8rem;
-            font-weight: bold;
-            z-index: 9999;
             box-shadow: 0 0 40px rgba(217, 70, 166, 0.8);
-            animation: milestone-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 9999;
+            max-width: 500px;
             text-align: center;
+            color: #e0e0e0;
+            font-size: 1.8rem;
+            font-family: Georgia, serif;
+            line-height: 1.8;
+            animation: popup-appear 0.4s ease-out;
         `;
         
         document.body.appendChild(message);
+        
         setTimeout(() => {
-            message.style.animation = 'milestone-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) reverse';
+            message.style.animation = 'popup-appear 0.4s ease-out reverse';
             setTimeout(() => message.remove(), 400);
         }, 2000);
     }
@@ -328,7 +159,7 @@ function createGothTapGame() {
             e.stopPropagation();
             
             // Add points
-            score += element.points * (1 + combo * 0.1); // Combo bonus
+            score += element.points * (1 + combo * 0.1);
             combo++;
             
             // Update score display
@@ -385,7 +216,7 @@ function createGothTapGame() {
                 tapDiv.style.animation = 'tap-disappear 0.3s ease-out forwards';
                 setTimeout(() => tapDiv.remove(), 300);
             }
-            combo = Math.max(0, combo - 1); // Decrease combo if missed
+            combo = Math.max(0, combo - 1);
             if (combo === 0) {
                 comboDisplay.style.display = 'none';
             }
@@ -399,9 +230,60 @@ function createGothTapGame() {
     createTapElement();
 }
 
-// Add animations for tap game
-const tapGameStyles = document.createElement('style');
-tapGameStyles.textContent = `
+// ===== 1. FLOATING GOTHIC ELEMENTS (Bats & Hearts) =====
+function createFloatingElements() {
+    const elements = ['🦇', '🖤', '🌙', '💜'];
+    const container = document.body;
+    
+    setInterval(() => {
+        const element = document.createElement('div');
+        element.textContent = elements[Math.floor(Math.random() * elements.length)];
+        element.style.position = 'fixed';
+        element.style.left = Math.random() * window.innerWidth + 'px';
+        element.style.top = '-20px';
+        element.style.fontSize = Math.random() * 20 + 20 + 'px';
+        element.style.opacity = '0.6';
+        element.style.pointerEvents = 'none';
+        element.style.zIndex = '1';
+        element.style.animation = 'float 8s linear forwards';
+        
+        container.appendChild(element);
+        
+        setTimeout(() => element.remove(), 8000);
+    }, 1500);
+}
+
+// Add animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes float {
+        to {
+            transform: translateY(100vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+    
+    @keyframes glow {
+        0%, 100% { text-shadow: 0 0 10px #d946a6; }
+        50% { text-shadow: 0 0 20px #d946a6, 0 0 30px #8b5fbf; }
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+    
+    @keyframes popup-appear {
+        from {
+            transform: translate(-50%, -50%) scale(0.5);
+            opacity: 0;
+        }
+        to {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+    }
+    
     @keyframes tap-appear {
         from {
             transform: scale(0) rotate(-30deg);
@@ -429,70 +311,6 @@ tapGameStyles.textContent = `
             transform: translateY(-60px);
             opacity: 0;
         }
-    }
-    
-    @keyframes milestone-pop {
-        from {
-            transform: translate(-50%, -50%) scale(0.5);
-            opacity: 0;
-        }
-        to {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
-    }
-    
-    #goth-score-display:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 30px rgba(217, 70, 166, 0.9);
-    }
-`;
-document.head.appendChild(tapGameStyles);
-function createFloatingElements() {
-    const elements = ['🦇', '🖤', '🌙', '💜'];
-    const container = document.body;
-    
-    setInterval(() => {
-        const element = document.createElement('div');
-        element.textContent = elements[Math.floor(Math.random() * elements.length)];
-        element.style.position = 'fixed';
-        element.style.left = Math.random() * window.innerWidth + 'px';
-        element.style.top = '-20px';
-        element.style.fontSize = Math.random() * 20 + 20 + 'px';
-        element.style.opacity = '0.6';
-        element.style.pointerEvents = 'none';
-        element.style.zIndex = '1';
-        element.style.animation = 'float 8s linear forwards';
-        
-        container.appendChild(element);
-        
-        setTimeout(() => element.remove(), 8000);
-    }, 1500);
-}
-
-// Add floating animation
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes float {
-        to {
-            transform: translateY(100vh) rotate(360deg);
-            opacity: 0;
-        }
-    }
-    
-    @keyframes glow {
-        0%, 100% { text-shadow: 0 0 10px #d946a6; }
-        50% { text-shadow: 0 0 20px #d946a6, 0 0 30px #8b5fbf; }
-    }
-    
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-    }
-    
-    @keyframes typewriter {
-        from { width: 0; }
-        to { width: 100%; }
     }
     
     .goth-glow {
@@ -524,7 +342,6 @@ const gothQuotes = [
 function generateGothQuote() {
     const quote = gothQuotes[Math.floor(Math.random() * gothQuotes.length)];
     
-    // Create a cute popup
     const popup = document.createElement('div');
     popup.style.cssText = `
         position: fixed;
@@ -549,30 +366,12 @@ function generateGothQuote() {
     popup.textContent = quote;
     document.body.appendChild(popup);
     
-    // Add popup animation
-    const popupStyle = document.createElement('style');
-    popupStyle.textContent = `
-        @keyframes popup-appear {
-            from {
-                transform: translate(-50%, -50%) scale(0.5);
-                opacity: 0;
-            }
-            to {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
-        }
-    `;
-    document.head.appendChild(popupStyle);
-    
-    // Remove after 5 seconds
     setTimeout(() => {
         popup.style.animation = 'popup-appear 0.4s ease-out reverse';
         setTimeout(() => popup.remove(), 400);
     }, 5000);
 }
 
-// Add quote button to page
 function addQuoteButton() {
     const button = document.createElement('button');
     button.textContent = '💜 Goth Wisdom 💜';
@@ -634,4 +433,131 @@ function addHeadingGlows() {
 
 // ===== 5. CUTE HEART TRAIL (Follow cursor) =====
 function createHeartTrail() {
-    document.addEventListener('mousemove', (
+    document.addEventListener('mousemove', (e) => {
+        if (Math.random() > 0.8) {
+            const heart = document.createElement('div');
+            heart.textContent = '💜';
+            heart.style.cssText = `
+                position: fixed;
+                left: ${e.clientX}px;
+                top: ${e.clientY}px;
+                pointer-events: none;
+                font-size: 1.5rem;
+                opacity: 0.7;
+                z-index: 5;
+            `;
+            
+            document.body.appendChild(heart);
+            
+            let opacity = 0.7;
+            let top = e.clientY;
+            const interval = setInterval(() => {
+                opacity -= 0.05;
+                top += 2;
+                heart.style.opacity = opacity;
+                heart.style.top = top + 'px';
+                
+                if (opacity <= 0) {
+                    clearInterval(interval);
+                    heart.remove();
+                }
+            }, 30);
+        }
+    });
+}
+
+// ===== 6. EASTER EGG: GOTH GIRL COUNTER =====
+let gothGirlsSaved = 0;
+
+function addGothGirlCounter() {
+    const logo = document.querySelector('.nav-logo');
+    if (logo) {
+        logo.style.cursor = 'pointer';
+        logo.style.transition = 'all 0.3s ease';
+        
+        logo.addEventListener('click', () => {
+            gothGirlsSaved++;
+            
+            const celebrate = document.createElement('div');
+            celebrate.textContent = `🖤 ${gothGirlsSaved} Goth Girls Saved! 🖤`;
+            celebrate.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: #d946a6;
+                color: white;
+                padding: 2rem;
+                border-radius: 10px;
+                font-size: 1.5rem;
+                font-weight: bold;
+                z-index: 9998;
+                box-shadow: 0 0 30px rgba(217, 70, 166, 0.8);
+            `;
+            
+            document.body.appendChild(celebrate);
+            
+            setTimeout(() => {
+                celebrate.style.animation = 'float 2s ease-out forwards';
+                setTimeout(() => celebrate.remove(), 2000);
+            }, 1000);
+        });
+    }
+}
+
+// ===== 7. SMOOTH SCROLL EFFECT =====
+function smoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+}
+
+// ===== 8. PAGE LOAD ANIMATION =====
+function addPageLoadAnimation() {
+    document.body.style.opacity = '0';
+    document.body.style.transition = 'opacity 0.8s ease-in';
+    
+    setTimeout(() => {
+        document.body.style.opacity = '1';
+    }, 100);
+}
+
+// ===== 9. KEYBOARD SHORTCUT: PRESS 'G' for Goth Wisdom =====
+document.addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() === 'g') {
+        generateGothQuote();
+    }
+});
+
+// ===== INITIALIZE EVERYTHING =====
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🖤 Save Goth Girl Program - JavaScript Activated! 🖤');
+    
+    createGothTapGame();            // Goth Girl Tap Game!
+    createFloatingElements();      // Floating bats, hearts, moons
+    addQuoteButton();              // Cute quote generator button
+    addCardHoverEffects();         // Smooth card hover effects
+    addHeadingGlows();             // Glowing headings
+    createHeartTrail();            // Heart trail following cursor
+    addGothGirlCounter();          // Easter egg counter
+    smoothScroll();                // Smooth scrolling
+    addPageLoadAnimation();        // Page fade-in animation
+});
+
+// ===== WELCOME MESSAGE =====
+console.log(`
+🖤🖤🖤 Welcome to Save Goth Girl Program 🖤🖤🖤
+💜 Preserving goth culture, one website at a time 💜
+🌙 Tap the goth emojis to play the game! 🌙
+🖤 Press 'G' for goth wisdom! 🖤
+💜 Click the SGGP logo to count saved goth girls! 💜
+`);
