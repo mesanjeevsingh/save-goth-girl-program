@@ -1,6 +1,165 @@
 // 🖤 Save Goth Girl Program - Interactive JavaScript 🖤
 // Cute & Gothic features to make the website come alive!
 
+// ===== 0. CUTE BLACK CAT ANIMATION =====
+function createBlackCat() {
+    const cat = document.createElement('div');
+    cat.textContent = '🐈‍⬛';
+    cat.id = 'goth-cat';
+    cat.style.cssText = `
+        position: fixed;
+        left: -50px;
+        bottom: 100px;
+        font-size: 3rem;
+        cursor: pointer;
+        z-index: 999;
+        user-select: none;
+        pointer-events: auto;
+        transition: all 0.3s ease;
+    `;
+    
+    document.body.appendChild(cat);
+    
+    let catX = -50;
+    let catY = window.innerHeight - 150;
+    let direction = 1; // 1 for right, -1 for left
+    let isWalking = true;
+    
+    // Cat walking animation
+    function walkCat() {
+        if (isWalking) {
+            catX += direction * 2;
+            
+            // Change direction when reaching edges
+            if (catX > window.innerWidth) {
+                direction = -1;
+            } else if (catX < -50) {
+                direction = 1;
+            }
+            
+            cat.style.left = catX + 'px';
+            cat.style.bottom = catY + 'px';
+            
+            // Flip cat based on direction
+            if (direction === -1) {
+                cat.style.transform = 'scaleX(-1)';
+            } else {
+                cat.style.transform = 'scaleX(1)';
+            }
+        }
+        
+        requestAnimationFrame(walkCat);
+    }
+    
+    walkCat();
+    
+    // Click anywhere to make cat jump there
+    document.addEventListener('click', (e) => {
+        isWalking = false;
+        
+        const clickX = e.clientX;
+        const clickY = e.clientY;
+        
+        // Calculate distance and direction
+        const distX = clickX - catX;
+        const distY = clickY - catY;
+        const distance = Math.sqrt(distX * distX + distY * distY);
+        
+        // Flip cat if jumping left
+        if (clickX < catX) {
+            cat.style.transform = 'scaleX(-1)';
+        } else {
+            cat.style.transform = 'scaleX(1)';
+        }
+        
+        // Jump animation
+        cat.style.transition = `all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)`;
+        cat.style.left = clickX + 'px';
+        cat.style.bottom = clickY + 'px';
+        cat.style.fontSize = '4rem';
+        
+        catX = clickX;
+        catY = clickY;
+        
+        // Add cute jump effect
+        cat.style.animation = 'cat-jump 0.5s ease-out';
+        
+        // Meow sound effect (visual)
+        showCatMeow(clickX, clickY);
+        
+        // Resume walking after 2 seconds
+        setTimeout(() => {
+            isWalking = true;
+            cat.style.animation = 'none';
+            cat.style.fontSize = '3rem';
+            cat.style.transition = 'all 0.3s ease';
+        }, 2000);
+    });
+    
+    // Cat hover effect
+    cat.addEventListener('mouseover', () => {
+        cat.style.fontSize = '4rem';
+        cat.textContent = '🐈‍⬛✨';
+    });
+    
+    cat.addEventListener('mouseout', () => {
+        cat.style.fontSize = '3rem';
+        cat.textContent = '🐈‍⬛';
+    });
+}
+
+// Show cute "meow" text when cat jumps
+function showCatMeow(x, y) {
+    const meows = ['meow 🖤', 'mew!', 'purr 💜', 'meoowww', '🐾'];
+    const meow = document.createElement('div');
+    meow.textContent = meows[Math.floor(Math.random() * meows.length)];
+    meow.style.cssText = `
+        position: fixed;
+        left: ${x}px;
+        top: ${y}px;
+        font-size: 1.2rem;
+        color: #d946a6;
+        pointer-events: none;
+        font-weight: bold;
+        z-index: 998;
+        animation: meow-float 2s ease-out forwards;
+    `;
+    
+    document.body.appendChild(meow);
+    setTimeout(() => meow.remove(), 2000);
+}
+
+// Add cat animations to style
+const catAnimationStyle = document.createElement('style');
+catAnimationStyle.textContent = `
+    @keyframes cat-jump {
+        0% {
+            transform: translateY(0) scaleX(1);
+            filter: drop-shadow(0 0 0px rgba(217, 70, 166, 0));
+        }
+        50% {
+            transform: translateY(-30px) scaleX(1);
+            filter: drop-shadow(0 0 15px rgba(217, 70, 166, 0.6));
+        }
+        100% {
+            transform: translateY(0) scaleX(1);
+            filter: drop-shadow(0 0 0px rgba(217, 70, 166, 0));
+        }
+    }
+    
+    @keyframes meow-float {
+        0% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-40px);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(catAnimationStyle);
+
 // ===== 1. FLOATING GOTHIC ELEMENTS (Bats & Hearts) =====
 function createFloatingElements() {
     const elements = ['🦇', '🖤', '🌙', '💜'];
@@ -347,6 +506,7 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🖤 Save Goth Girl Program - JavaScript Activated! 🖤');
     
+    createBlackCat();               // Cute black cat that walks and jumps!
     createFloatingElements();      // Floating bats, hearts, moons
     addQuoteButton();              // Cute quote generator button
     addCardHoverEffects();         // Smooth card hover effects
